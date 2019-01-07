@@ -2,6 +2,7 @@ from flask import Flask
 from msal import PublicClientApplication
 import os
 
+
 class PythonMSAL:
     
     def __init__(self, client_id, authority, username, password, scopes):
@@ -10,7 +11,6 @@ class PythonMSAL:
         self.username = username
         self.password = password
         self.scopes = scopes
-
 
     def msal_connect(self):
 
@@ -27,7 +27,7 @@ class PythonMSAL:
             # Assuming the end user chose this one
             chosen = accounts[0]
             # Now let's try to find a token in cache for this account
-            result = app.acquire_token_silent(config["scope"], account=chosen)
+            result = app.acquire_token_silent(self.scopes, account=chosen)
         
         if not result:
             # So no suitable token exists in cache. Let's get a new one from AAD.
@@ -37,8 +37,10 @@ class PythonMSAL:
 
 flapp = Flask(__name__)
 
+
 @flapp.route("/")
 def test_connection():
+
     msal_obj = PythonMSAL(os.environ['CLIENT_ID'],
                           os.environ['AUTHORITY'],
                           os.environ['USERNAME'],
